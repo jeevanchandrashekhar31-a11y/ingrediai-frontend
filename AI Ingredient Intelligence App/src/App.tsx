@@ -32,6 +32,8 @@ export type ViewMode = "landing" | "chat" | "camera" | "voice";
 /* ---------------- APP ---------------- */
 
 export default function App() {
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const [viewMode, setViewMode] = useState<ViewMode>("landing");
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -43,17 +45,21 @@ export default function App() {
     setIsLoading(true);
 
     try {
-      const res = await fetch(
-        "http://localhost:8000/api/reasoning/ingredient",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ingredients: content,
-            product_context: "general food product",
-          }),
-        }
-      );
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+const res = await fetch(
+  `${API_BASE_URL}/api/reasoning/ingredient`,
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ingredients: content,
+      product_context: "general food product",
+    }),
+  }
+);
+
+
 
       const data = await res.json();
 
