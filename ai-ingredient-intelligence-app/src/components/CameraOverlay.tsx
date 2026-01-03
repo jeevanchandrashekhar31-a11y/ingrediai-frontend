@@ -11,22 +11,34 @@ export function CameraOverlay({ onCapture, onClose }: CameraOverlayProps) {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const handleAnalyze = async () => {
     if (!selectedImage) return;
 
     setIsProcessing(true);
 
-    /*
-      IMPORTANT:
-      For now we DO NOT do OCR here.
-      We send a placeholder string to keep flow clean.
-      OCR integration comes later.
-    */
+    try {
+      const formData = new FormData();
+      formData.append("image", selectedImage);
 
-    setTimeout(() => {
-      onCapture("Ingredients detected from image");
+      const res = await fetch(`${API_BASE_URL}/api/ocr`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (data.extracted_text && data.extracted_text.length > 3) {
+        onCapture(data.extracted_text);
+      } else {
+        onCapture("Unable to clearly detect ingredients from image");
+      }
+    } catch (err) {
+      onCapture("Image analysis failed. Please try again.");
+    } finally {
       setIsProcessing(false);
-    }, 800);
+    }
   };
 
   return (
@@ -47,7 +59,6 @@ export function CameraOverlay({ onCapture, onClose }: CameraOverlayProps) {
       {/* Content */}
       <div className="flex flex-col items-center justify-center h-full px-6">
         <div className="w-full max-w-md bg-white/5 border border-white/10 rounded-2xl p-6 space-y-6">
-
           <h2 className="text-white text-lg font-medium text-center">
             Analyze ingredient label
           </h2>
