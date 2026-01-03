@@ -9,11 +9,11 @@ import { VoiceOverlay } from "./components/VoiceOverlay";
 export type IngredientReasoning = {
   name: string;
   severity: "low" | "medium" | "high";
-  why_it_matters: string;
+
+  what_it_is: string;
+  why_it_is_used: string;
   tradeoffs: string;
-  who_might_care: string;
-  confidence_uncertainty: string;
-  human_conclusion: string;
+  uncertainty: string;
 };
 
 export type Message = {
