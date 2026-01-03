@@ -55,7 +55,6 @@ export function ActiveChatScreen({
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-6 py-8 space-y-10">
-        {/* Loading skeleton */}
         {isLoading && (
           <div className="space-y-6">
             <SkeletonCard />
@@ -76,46 +75,67 @@ export function ActiveChatScreen({
 
           return (
             <div key={msg.id} className="space-y-8">
-              {msg.ingredients?.map((ing) => (
-                <div
-                  key={ing.name}
-                  className="rounded-2xl bg-white/5 border border-white/10 p-6 space-y-6"
-                >
-                  {/* Header */}
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-white text-lg font-semibold">
-                      {ing.name}
-                    </h2>
+              {msg.ingredients?.map((ing, i) => {
+                const severity = ing.severity?.toUpperCase() as Severity;
 
-                    {ing.severity && (
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase ${severityStyles[ing.severity as Severity]}`}
-                      >
-                        {ing.severity}
-                      </span>
-                    )}
+                return (
+                  <div
+                    key={i}
+                    className="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-4"
+                  >
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-white capitalize">
+                        {ing.name}
+                      </h3>
+
+                      {severity && (
+                        <span
+                          className={`text-xs px-3 py-1 rounded-full ${severityStyles[severity]}`}
+                        >
+                          {severity}
+                        </span>
+                      )}
+                    </div>
+
+                    <div>
+                      <p className="text-teal-400 text-sm font-medium mb-1">
+                        What it is
+                      </p>
+                      <p className="text-gray-300 text-sm">
+                        {ing.what_it_is}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-teal-400 text-sm font-medium mb-1">
+                        Why this is used
+                      </p>
+                      <p className="text-gray-300 text-sm">
+                        {ing.why_it_is_used}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-teal-400 text-sm font-medium mb-1">
+                        Trade-offs
+                      </p>
+                      <p className="text-gray-300 text-sm">
+                        {ing.tradeoffs}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-teal-400 text-sm font-medium mb-1">
+                        Uncertainty
+                      </p>
+                      <p className="text-gray-300 text-sm">
+                        {ing.uncertainty}
+                      </p>
+                    </div>
                   </div>
+                );
+              })}
 
-                  {/* Sections */}
-                  <Section title="Why this matters">
-                    <BulletText text={ing.why_it_matters} />
-                  </Section>
-
-                  <Section title="Trade-offs to be aware of">
-                    <BulletText text={ing.tradeoffs} />
-                  </Section>
-
-                  <Section title="Who might care about this">
-                    <BulletText text={ing.who_might_care} />
-                  </Section>
-
-                  <Section title="What we know and don’t know">
-                    <BulletText text={ing.confidence_uncertainty} />
-                  </Section>
-                </div>
-              ))}
-
-              {/* Overall nutrition */}
               {msg.overall_nutrition && (
                 <div className="rounded-2xl border border-teal-500/30 bg-teal-500/10 p-6">
                   <h3 className="text-teal-400 text-sm font-semibold mb-2">
@@ -127,7 +147,6 @@ export function ActiveChatScreen({
                 </div>
               )}
 
-              {/* Final conclusion */}
               {msg.overall_conclusion && (
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
                   <p className="text-gray-200 text-sm leading-relaxed">
@@ -187,33 +206,6 @@ export function ActiveChatScreen({
 }
 
 /* ---------------- HELPERS ---------------- */
-
-function Section({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="space-y-2">
-      <div className="flex items-center gap-2 text-emerald-400 text-sm font-semibold">
-        <span className="h-2 w-2 rounded-full bg-emerald-400" />
-        {title}
-      </div>
-      {children}
-    </div>
-  );
-}
-
-function BulletText({ text }: { text: string }) {
-  return (
-    <div className="flex items-start gap-3">
-      <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/90 shrink-0" />
-      <p className="text-sm text-gray-200 leading-relaxed">{text}</p>
-    </div>
-  );
-}
 
 function SkeletonCard() {
   return (
