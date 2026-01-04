@@ -75,66 +75,70 @@ export function ActiveChatScreen({
 
           return (
             <div key={msg.id} className="space-y-8">
-              {msg.ingredients?.map((ing, i) => {
-                const severity = ing.severity?.toUpperCase() as Severity;
+              {msg.ingredients?.map((ing, i) => (
+                <div
+                  key={i}
+                  className="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-4"
+                >
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-white capitalize">
+                      {ing.name || "Unknown ingredient"}
+                    </h3>
 
-                return (
-                  <div
-                    key={i}
-                    className="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-4"
-                  >
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold text-white capitalize">
-                        {ing.name}
-                      </h3>
-
-                      {severity && (
-                        <span
-                          className={`text-xs px-3 py-1 rounded-full ${severityStyles[severity]}`}
-                        >
-                          {severity}
-                        </span>
-                      )}
-                    </div>
-
-                    <div>
-                      <p className="text-teal-400 text-sm font-medium mb-1">
-                        What it is
-                      </p>
-                      <p className="text-gray-300 text-sm">
-                        {ing.what_it_is}
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-teal-400 text-sm font-medium mb-1">
-                        Why this is used
-                      </p>
-                      <p className="text-gray-300 text-sm">
-                        {ing.why_it_is_used}
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-teal-400 text-sm font-medium mb-1">
-                        Trade-offs
-                      </p>
-                      <p className="text-gray-300 text-sm">
-                        {ing.tradeoffs}
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-teal-400 text-sm font-medium mb-1">
-                        Uncertainty
-                      </p>
-                      <p className="text-gray-300 text-sm">
-                        {ing.uncertainty}
-                      </p>
-                    </div>
+                    <span
+                      className={`text-xs px-3 py-1 rounded-full ${
+                        ing.severity === "high"
+                          ? "bg-red-500/20 text-red-400"
+                          : ing.severity === "medium"
+                          ? "bg-yellow-500/20 text-yellow-400"
+                          : "bg-green-500/20 text-green-400"
+                      }`}
+                    >
+                      {ing.severity || "low"}
+                    </span>
                   </div>
-                );
-              })}
+
+                  <div>
+                    <p className="text-teal-400 text-sm font-medium mb-1">
+                      What it is
+                    </p>
+                    <p className="text-gray-300 text-sm">
+                      {ing.what_it_is ||
+                        "No clear description available for this ingredient."}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-teal-400 text-sm font-medium mb-1">
+                      Why this is used
+                    </p>
+                    <p className="text-gray-300 text-sm">
+                      {ing.why_it_is_used ||
+                        "Usage details are not clearly defined."}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-teal-400 text-sm font-medium mb-1">
+                      Trade-offs
+                    </p>
+                    <p className="text-gray-300 text-sm">
+                      {ing.tradeoffs ||
+                        "No major trade-offs are commonly associated."}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-teal-400 text-sm font-medium mb-1">
+                      Uncertainty
+                    </p>
+                    <p className="text-gray-300 text-sm">
+                      {ing.uncertainty ||
+                        "Scientific understanding is generally stable."}
+                    </p>
+                  </div>
+                </div>
+              ))}
 
               {msg.overall_nutrition && (
                 <div className="rounded-2xl border border-teal-500/30 bg-teal-500/10 p-6">
